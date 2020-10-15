@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -11,12 +11,25 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const client = new MongoClient(process.env.ATLAS_URI, {
+const uri = process.env.ATLAS_URI;
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
   useUnifiedTopology: true,
 });
-client.connect().then(() => {
+const connection = mongoose.connection;
+connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
+
+const usersRouter = require("./routes/users");
+app.use("/users", usersRouter);
+
+const loginRouter = require("./routes/login");
+app.use("/login", loginRouter);
+
+const authRouter = require("./routes/authenticate");
+app.use("/authenticate", authRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
