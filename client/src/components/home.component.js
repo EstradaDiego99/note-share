@@ -4,10 +4,11 @@ import Cookies from "js-cookie";
 
 export default function Home() {
   const [user, setUser] = useState(undefined);
+  const [notes, setNotes] = useState([]);
 
   const backendURL = "http://localhost:5000";
 
-  const authenticateToken = async () => {
+  const authenticateUser = async () => {
     try {
       const authResponse = await axios.post(`${backendURL}/authenticate/`, {
         token: Cookies.get("note_share_id_token"),
@@ -25,13 +26,35 @@ export default function Home() {
     }
   };
 
+  const loadNotes = async () => {
+    try {
+      const resNotes = await axios.get(`${backendURL}/notes/`);
+      setNotes(resNotes.data);
+    } catch (error) {
+      console.log("Notes not found");
+    }
+  };
+
   const logout = () => {
     Cookies.remove("note_share_id_token");
     window.location = "/login";
   };
 
+  const notesDisplay = notes.map((note) => (
+    <div>
+      <p>{note.title}</p>
+      <p>{note.school}</p>
+      <p>{note.course}</p>
+      <p>{note.professor}</p>
+      <a target="blank" href={note.file}>
+        File
+      </a>
+    </div>
+  ));
+
   useEffect(() => {
-    authenticateToken();
+    authenticateUser();
+    loadNotes();
   }, []);
 
   return (
@@ -40,6 +63,14 @@ export default function Home() {
         <>
           <h1>Hello {user.name}!! Welcome to the HOME page!!</h1>
           <button onClick={logout}>Log out</button>
+          <button
+            onClick={() => {
+              window.location = "/new_note";
+            }}
+          >
+            New note
+          </button>
+          {notesDisplay}
         </>
       )}
     </div>

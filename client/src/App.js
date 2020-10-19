@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import SignUp from "./components/signup.component";
 import LogIn from "./components/login.component";
 import Home from "./components/home.component";
+import NewNote from "./components/new-note.component";
 import "./App.css";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/" exact component={Home} />
       <Route path="/login" exact component={LogIn} />
       <Route path="/signup" exact component={SignUp} />
+      <Route path="/new_note" exact component={NewNote} />
     </Router>
   );
 }
