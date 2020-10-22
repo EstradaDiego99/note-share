@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Note = require("../models/Note.model");
+const Note = require("../models/note.model");
 const { Storage } = require("@google-cloud/storage");
 const Multer = require("multer");
 

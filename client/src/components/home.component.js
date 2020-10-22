@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import NoteSummary from "./note-summary.component";
+import { backendURL } from "../globals";
 
 export default function Home() {
   const [user, setUser] = useState(undefined);
   const [notes, setNotes] = useState([]);
-
-  const backendURL = "http://localhost:5000";
 
   const authenticateUser = async () => {
     try {

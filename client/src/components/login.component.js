@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { backendURL } from "../globals";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -7,8 +8,6 @@ export default function LogIn() {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
-  const backendURL = "http://localhost:5000";
 
   const login = async (e) => {
     e.preventDefault();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { backendURL } from "../globals";
 // import bcrypt from "bcryptjs";
 
 export default function SignUp(props) {
@@ -12,8 +13,6 @@ export default function SignUp(props) {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
-  const backendURL = "http://localhost:5000";
 
   const onSubmit = async (e) => {
     e.preventDefault();

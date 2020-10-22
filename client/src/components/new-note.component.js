@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { backendURL } from "../globals";
 
 export default function NewNote(props) {
   const [user, setUser] = useState(undefined);
@@ -16,8 +17,6 @@ export default function NewNote(props) {
   const [schoolError, setSchoolError] = useState("");
   const [courseError, setCourseError] = useState("");
   const [professorError, setProfessorError] = useState("");
-
-  const backendURL = "http://localhost:5000";
 
   const authenticateUser = async () => {
     try {
