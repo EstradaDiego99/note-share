@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import NoteSummary from "./note-summary.component";
 
 export default function Home() {
   const [user, setUser] = useState(undefined);
@@ -40,18 +41,6 @@ export default function Home() {
     window.location = "/login";
   };
 
-  const notesDisplay = notes.map((note) => (
-    <div>
-      <p>{note.title}</p>
-      <p>{note.school}</p>
-      <p>{note.course}</p>
-      <p>{note.professor}</p>
-      <a target="blank" href={note.file}>
-        File
-      </a>
-    </div>
-  ));
-
   useEffect(() => {
     authenticateUser();
     loadNotes();
@@ -61,16 +50,29 @@ export default function Home() {
     <div>
       {user && (
         <>
-          <h1>Hello {user.name}!! Welcome to the HOME page!!</h1>
-          <button onClick={logout}>Log out</button>
-          <button
-            onClick={() => {
-              window.location = "/new_note";
-            }}
-          >
-            New note
-          </button>
-          {notesDisplay}
+          <div className="jumbotron text-center">
+            <h1 className="text-center mt-4 mb-4">
+              Hello {user.name}!! Welcome to the HOME page!!
+            </h1>
+            <button onClick={logout} className="btn btn-lg btn-danger">
+              <span class="material-icons">exit_to_app</span> Log out
+            </button>
+          </div>
+          <div className="container">
+            <div className="row">
+              {notes.map((note) => (
+                <NoteSummary note={note} key={note._id} />
+              ))}
+            </div>
+          </div>
+          <div className="container text-right mb-4">
+            <a
+              className="btn btn-lg btn-primary"
+              onClick={() => (window.location = "/new_note")}
+            >
+              <span className="material-icons">add_box</span> New note
+            </a>
+          </div>
         </>
       )}
     </div>

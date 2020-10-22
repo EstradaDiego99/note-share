@@ -108,8 +108,14 @@ export default function NewNote(props) {
   }, []);
 
   return (
-    <div>
-      <main>
+    <div className="d-flex min-vh-100 align-items-center">
+      <main id="new-note-component" className="container">
+        <button
+          onClick={() => (window.location = "/")}
+          className="btn btn-lg btn-secondary mb-4"
+        >
+          Back
+        </button>
         <form onSubmit={onSubmit} autoComplete="off">
           <div className="card">
             <div className="card-body">
@@ -185,11 +191,13 @@ export default function NewNote(props) {
 
               <div className="flex-grow-1"></div>
 
-              <input
-                type="submit"
-                value="Register"
-                className="btn btn-primary mt-4"
-              />
+              <div className="container w-100 text-right">
+                <input
+                  type="submit"
+                  value="Upload Note"
+                  className="btn btn-primary btn-lg mt-4"
+                />
+              </div>
             </div>
           </div>
         </form>

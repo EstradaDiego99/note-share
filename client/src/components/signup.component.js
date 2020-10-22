@@ -94,17 +94,27 @@ export default function SignUp(props) {
   };
 
   return (
-    <div>
-      <main>
-        <form onSubmit={onSubmit} autoComplete="off">
-          <div className="card">
+    <div className="d-flex min-vh-100 align-items-center">
+      <main id="signup-component" className="container text-center">
+        <div className="row justify-content-center align-items-center flex-column">
+          <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
+          <form
+            onSubmit={onSubmit}
+            autoComplete="off"
+            className="card form-group"
+          >
             <div className="card-body">
-              <div className="form-group">
-                <label>Name: </label>
+              <div className="input-group mb-1">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <span class="material-icons">person</span>
+                  </div>
+                </div>
                 <input
                   type="text"
                   autoComplete="nope"
                   className="form-control"
+                  placeholder="Name"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
@@ -113,12 +123,17 @@ export default function SignUp(props) {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Last name: </label>
+              <div className="input-group mb-4">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <span class="material-icons">people_alt</span>
+                  </div>
+                </div>
                 <input
                   type="text"
                   autoComplete="nope"
                   className="form-control"
+                  placeholder="Last name"
                   value={lastName}
                   onChange={(e) => {
                     setLastName(e.target.value);
@@ -128,12 +143,17 @@ export default function SignUp(props) {
               </div>
               <small className="text-danger">{nameError}</small>
 
-              <div className="form-group">
-                <label>Email: </label>
+              <div className="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <span class="material-icons">email</span>
+                  </div>
+                </div>
                 <input
                   type="text"
                   autoComplete="nope"
                   className="form-control"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -143,12 +163,17 @@ export default function SignUp(props) {
               </div>
               <small className="text-danger">{emailError}</small>
 
-              <div className="form-group">
-                <label>Password: </label>
+              <div className="input-group mb-1">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <span class="material-icons">vpn_key</span>
+                  </div>
+                </div>
                 <input
                   type="password"
                   autoComplete="nope"
                   className="form-control"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -157,12 +182,17 @@ export default function SignUp(props) {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Confirm Password: </label>
+              <div className="input-group mb-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <span class="material-icons">vpn_key</span>
+                  </div>
+                </div>
                 <input
                   type="password"
                   autoComplete="nope"
                   className="form-control"
+                  placeholder="Confirm password"
                   value={passwordConfirm}
                   onChange={(e) => {
                     setPasswordConfirm(e.target.value);
@@ -177,11 +207,14 @@ export default function SignUp(props) {
               <input
                 type="submit"
                 value="Register"
-                className="btn btn-primary mt-4"
+                className="btn btn-lg btn-primary btn-block mt-4"
               />
+              <a href="/login" className="btn btn-sm btn-secondary btn-block">
+                Log In
+              </a>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </main>
     </div>
   );
