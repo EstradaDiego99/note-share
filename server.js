@@ -23,16 +23,16 @@ connection.once("open", () => {
 });
 
 const usersRouter = require("./routes/users");
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 const notesRouter = require("./routes/notes");
-app.use("/notes", notesRouter);
+app.use("/api/notes", notesRouter);
 
 const loginRouter = require("./routes/login");
-app.use("/login", loginRouter);
+app.use("/api/login", loginRouter);
 
 const authRouter = require("./routes/authenticate");
-app.use("/authenticate", authRouter);
+app.use("/api/authenticate", authRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
