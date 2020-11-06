@@ -32,6 +32,7 @@ export default function NewNote(props) {
       }
       setUser(loggedUser.data);
     } catch (error) {
+      alert(error);
       window.location = "/login";
     }
   };
@@ -86,8 +87,6 @@ export default function NewNote(props) {
     newNote.append("school", school);
     newNote.append("course", course);
     newNote.append("professor", professor);
-
-    console.log(newNote);
 
     try {
       await axios.post(`${backendURL}/notes/`, newNote, {

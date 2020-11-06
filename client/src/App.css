@@ -7,6 +7,19 @@
   pointer-events: none;
 }
 
+.note-summary {
+  cursor: pointer;
+}
+
+.note-info p {
+  font-size: 1.5em;
+  line-height: 1em;
+}
+
+.material-icons {
+  font-size: 0.9em;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -34,5 +47,11 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .pg-viewer-wrapper {
+    height: 75vh;
   }
 }

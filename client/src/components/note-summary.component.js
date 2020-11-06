@@ -2,14 +2,20 @@ import React from "react";
 
 export default function NoteSummary(props) {
   return (
-    <div className="col-md-4 mb-4">
+    <div
+      className="col-md-4 mb-4 note-summary"
+      onClick={() => {
+        window.location = `/notes/${props.note._id}`;
+      }}
+    >
       <div className="card box-shadow">
         <div className="card-img-top text-center bg-secondary">
-          <a target="blank" href={props.note.file}>
-            <span className="material-icons p-5 h1 text-light">
-              insert_drive_file
-            </span>
-          </a>
+          <span
+            className="material-icons p-5 h1 text-light"
+            style={{ fontSize: "2em" }}
+          >
+            insert_drive_file
+          </span>
         </div>
         <div className="card-body">
           <p className="mb-3" style={{ lineHeight: 1 }}>
