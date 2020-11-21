@@ -1,48 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import NoteSummary from "./note-summary.component";
-import { backendURL } from "../globals";
+import { backendURL } from "../utils/globals";
+import { authenticateUser, logout } from "../utils/auth";
 
 export default function Home() {
   const [user, setUser] = useState(undefined);
   const [notes, setNotes] = useState([]);
 
-  const authenticateUser = async () => {
-    try {
-      const authResponse = await axios.post(`${backendURL}/authenticate/`, {
-        token: Cookies.get("note_share_id_token"),
-      });
-      const loggedID = authResponse.data.jwtVerification._id;
-      const loggedUser = await axios.get(`${backendURL}/users/${loggedID}`);
-      if (!loggedUser.data) {
-        const error = new Error();
-        error.response = { status: 410 };
-        throw error;
-      }
-      setUser(loggedUser.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const loadNotes = async () => {
-    try {
-      const resNotes = await axios.get(`${backendURL}/notes/`);
-      setNotes(resNotes.data);
-    } catch (error) {
-      console.log("Notes not found");
-    }
-  };
-
-  const logout = () => {
-    Cookies.remove("note_share_id_token");
-    window.location = "/login";
-  };
-
   useEffect(() => {
-    authenticateUser();
-    loadNotes();
+    authenticateUser()
+      .then((u) => setUser(u))
+      .catch((e) => {
+        console.log(e);
+      });
+    axios
+      .get(`${backendURL}/notes/`)
+      .then((resNotes) => setNotes(resNotes.data))
+      .catch((error) => alert("Notes not found"));
   }, []);
 
   return (

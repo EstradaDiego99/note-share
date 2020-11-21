@@ -3,4 +3,4 @@ const backendURL =
     ? "https://note-share-web.herokuapp.com/api"
     : "http://localhost:5000/api";
 
-module.exports = { backendURL };
+export { backendURL };

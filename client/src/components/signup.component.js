@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { backendURL } from "../globals";
+import { backendURL } from "../utils/globals";
 // import bcrypt from "bcryptjs";
 
 export default function SignUp(props) {

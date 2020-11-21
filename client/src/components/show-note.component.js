@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
 import FileViewer from "react-file-viewer";
-import { backendURL } from "../globals";
+import { backendURL } from "../utils/globals";
+import { authenticateUser } from "../utils/auth";
 
 export default function ShowNote(props) {
   const [user, setUser] = useState(undefined);
@@ -12,65 +12,35 @@ export default function ShowNote(props) {
 
   const { noteID } = useParams();
 
-  const authenticateUser = async () => {
-    const authToken = Cookies.get("note_share_id_token");
-    if (!authToken) return;
-    try {
-      const authResponse = await axios.post(`${backendURL}/authenticate/`, {
-        token: authToken,
-      });
-      const loggedID = authResponse.data.jwtVerification._id;
-      const loggedUser = await axios.get(`${backendURL}/users/${loggedID}`);
-      if (!loggedUser.data) {
-        const error = new Error();
-        error.response = { status: 410 };
-        throw error;
-      }
-      setUser(loggedUser.data);
-    } catch (error) {
-      window.location = "/login";
-    }
-  };
-
-  const loadNote = async () => {
-    try {
-      const resNotes = await axios.get(`${backendURL}/notes/${noteID}`);
-      const note = resNotes.data;
-      note.type = note.file.substr(note.file.lastIndexOf(".") + 1);
-      setNote(note);
-      return note;
-    } catch (error) {
-      console.log("Note not found");
-      window.location = "/";
-    }
-  };
-
-  const loadAuthor = async (authorID) => {
-    try {
-      const resUser = await axios.get(`${backendURL}/users/${authorID}`);
-      setAuthor(resUser.data);
-    } catch (error) {
-      console.log("Author not found");
-    }
-  };
-
   const deleteNote = async () => {
     try {
       alert("Do you want to permanently delete this note?");
       await axios.delete(`${backendURL}/notes/${noteID}`);
       window.location = "/";
     } catch (error) {
-      console.log("Author not found");
+      alert("Note not found");
       window.location = "/";
     }
   };
 
   useEffect(() => {
-    if (note) loadAuthor(note.author);
-  }, [note]);
+    authenticateUser()
+      .then((user) => setUser(user))
+      .catch((error) => console.log(error));
+    axios
+      .get(`${backendURL}/notes/${noteID}`)
+      .then((resNotes) => {
+        const note = resNotes.data;
+        note.type = note.file.substr(note.file.lastIndexOf(".") + 1);
+        setNote(note);
+        axios
+          .get(`${backendURL}/users/${note.author}`)
+          .then((resUser) => setAuthor(resUser.data))
+          .catch((e) => alert("Author not found"));
+      })
+      .catch((e) => {});
+  }, [noteID]);
 
-  authenticateUser();
-  loadNote();
   return (
     <div className="d-flex min-vh-100 ">
       <main id="new-note-component" className="container">

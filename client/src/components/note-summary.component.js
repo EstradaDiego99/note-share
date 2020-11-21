@@ -1,12 +1,12 @@
 import React from "react";
 
 export default function NoteSummary(props) {
+  const { note } = props;
+
   return (
     <div
       className="col-md-4 mb-4 note-summary"
-      onClick={() => {
-        window.location = `/notes/${props.note._id}`;
-      }}
+      onClick={() => (window.location = `/notes/${note._id}`)}
     >
       <div className="card box-shadow">
         <div className="card-img-top text-center bg-secondary">
@@ -17,24 +17,25 @@ export default function NoteSummary(props) {
             insert_drive_file
           </span>
         </div>
+
         <div className="card-body">
           <p className="mb-3" style={{ lineHeight: 1 }}>
-            <strong>{props.note.title}</strong>
+            <strong>{note.title}</strong>
           </p>
           <p className="mb-2 pl-2" style={{ lineHeight: 1 }}>
-            {props.note.course}
+            {note.course}
           </p>
           <small
             className="mb-2 d-block pl-2 text-secondary"
             style={{ lineHeight: 1 }}
           >
-            {props.note.professor}
+            {note.professor}
           </small>
           <small
             className="mb-2 d-block pl-2 text-secondary"
             style={{ lineHeight: 1 }}
           >
-            {props.note.school}
+            {note.school}
           </small>
         </div>
       </div>

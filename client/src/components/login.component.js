@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { backendURL } from "../globals";
+import Cookies from "js-cookie";
+import { backendURL } from "../utils/globals";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -35,7 +36,9 @@ export default function LogIn() {
 
     try {
       const loginResponse = await axios.post(`${backendURL}/login/`, loginForm);
-      document.cookie = `note_share_id_token=${loginResponse.data.token}`;
+      Cookies.set("note_share_id_token", loginResponse.data.token, {
+        expires: 365,
+      });
       window.location = "/";
     } catch (error) {
       const { msg, errorCause } = error.response.data;
@@ -52,13 +55,13 @@ export default function LogIn() {
     <div className="d-flex min-vh-100 align-items-center">
       <main id="login-component" className="container text-center">
         <div className="row justify-content-center align-items-center flex-column">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
           <form onSubmit={login} autoComplete="off" className="card form-group">
             <div className="card-body">
               <div className="input-group mb-3">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <span class="material-icons">email</span>
+                <div className="input-group-prepend">
+                  <div className="input-group-text">
+                    <span className="material-icons">email</span>
                   </div>
                 </div>
                 <input
@@ -75,9 +78,9 @@ export default function LogIn() {
               </div>
 
               <div className="input-group mb-3">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <span class="material-icons">vpn_key</span>
+                <div className="input-group-prepend">
+                  <div className="input-group-text">
+                    <span className="material-icons">vpn_key</span>
                   </div>
                 </div>
                 <input

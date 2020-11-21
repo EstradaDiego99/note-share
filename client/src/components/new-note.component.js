@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { backendURL } from "../globals";
+import { backendURL } from "../utils/globals";
+import { authenticateUser } from "../utils/auth";
 
 export default function NewNote(props) {
   const [user, setUser] = useState(undefined);
@@ -17,25 +17,6 @@ export default function NewNote(props) {
   const [schoolError, setSchoolError] = useState("");
   const [courseError, setCourseError] = useState("");
   const [professorError, setProfessorError] = useState("");
-
-  const authenticateUser = async () => {
-    try {
-      const authResponse = await axios.post(`${backendURL}/authenticate/`, {
-        token: Cookies.get("note_share_id_token"),
-      });
-      const loggedID = authResponse.data.jwtVerification._id;
-      const loggedUser = await axios.get(`${backendURL}/users/${loggedID}`);
-      if (!loggedUser.data) {
-        const error = new Error();
-        error.response = { status: 410 };
-        throw error;
-      }
-      setUser(loggedUser.data);
-    } catch (error) {
-      alert(error);
-      window.location = "/login";
-    }
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -102,8 +83,18 @@ export default function NewNote(props) {
   };
 
   useEffect(() => {
-    authenticateUser();
+    authenticateUser()
+      .then((u) => setUser(u))
+      .catch((e) => {
+        console.log(e);
+        alert("Logged user was not found");
+        window.location = "/login";
+      });
   }, []);
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <div className="d-flex min-vh-100 align-items-center">
