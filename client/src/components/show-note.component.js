@@ -56,7 +56,7 @@ export default function ShowNote(props) {
 
   const deleteNote = async () => {
     try {
-      alert("Do you want to permanently delete this note?");
+      alert("This note will be permanently deleted");
       await axios.delete(`${backendURL}/notes/${noteID}`);
       window.location = "/";
     } catch (error) {
@@ -66,11 +66,14 @@ export default function ShowNote(props) {
   };
 
   useEffect(() => {
+    authenticateUser();
+    loadNote();
+  }, []);
+
+  useEffect(() => {
     if (note) loadAuthor(note.author);
   }, [note]);
 
-  authenticateUser();
-  loadNote();
   return (
     <div className="d-flex min-vh-100 ">
       <main id="new-note-component" className="container">
@@ -96,6 +99,17 @@ export default function ShowNote(props) {
                 </p>
                 <div className="flex-grow-1"></div>
                 <div className="d-flex mt-5">
+                  {user && author._id === user._id && (
+                    <button
+                      onClick={() => {
+                        window.location = `/edit_note/${note._id}`;
+                      }}
+                      className="btn btn-lg btn-secondary mr-3"
+                      target="blank"
+                    >
+                      <span className="material-icons">edit</span>
+                    </button>
+                  )}
                   <a
                     href={note.file}
                     className="btn btn-lg flex-grow-1 btn-primary"

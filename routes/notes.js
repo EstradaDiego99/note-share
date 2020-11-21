@@ -64,6 +64,7 @@ router.route("/:id").post((req, res) => {
   })
     .then(() => res.json("Note has been updated!"))
     .catch((err) => res.status(400).json("Error: " + err));
+  console.log(res)
 });
 
 router.route("/:id").delete((req, res) => {
