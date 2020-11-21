@@ -56,16 +56,42 @@ router.route("/:id").get((req, res) => {
 });
 
 // UPDATE
-router.route("/:id").post((req, res) => {
-  Note.findByIdAndUpdate(req.params.id, req.body, {
-    returnNewDocument: true,
-    new: true,
-    strict: false,
-  })
-    .then(() => res.json("Note has been updated!"))
-    .catch((err) => res.status(400).json("Error: " + err));
+router.post("/:id", multer.single("file"), (req, res, next) => {
+  const noteID = req.params.id;
+  const updatedNote = req.body;
+  const newFile = req.file;
+
+  if (!newFile) {
+    Note.findByIdAndUpdate(noteID, updatedNote, {
+      returnNewDocument: true,
+      new: true,
+      strict: false,
+    })
+      .then(() => res.json("Note has been updated!"))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+    const randNum = Math.random().toString(36).substring(2, 15);
+
+    const blob = bucket.file(`${randNum}-${newFile.originalname}`);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => next(err));
+    blobStream.on("finish", () => {
+      // The public URL can be used to directly access the file via HTTP.
+      updatedNote.file = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+      Note.findByIdAndUpdate(noteID, updatedNote, {
+        returnNewDocument: true,
+        new: true,
+        strict: false,
+      })
+        .then(() => res.json("Note has been updated!"))
+        .catch((err) => res.status(400).json("Error: " + err));
+    });
+    blobStream.end(newFile.buffer);
+  }
 });
 
+// DELETE
 router.route("/:id").delete((req, res) => {
   Note.findByIdAndDelete(req.params.id)
     .then(() => res.json("Note has been removed from the system."))
