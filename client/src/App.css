@@ -45,6 +45,15 @@
   cursor: pointer;
 }
 
+.home-query {
+  display: inline-block;
+  width: 30%;
+  min-width: 210px;
+  background-color: transparent;
+  border-bottom: 4px solid gray;
+  margin: 0.5em;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

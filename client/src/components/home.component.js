@@ -7,18 +7,43 @@ import { authenticateUser, logout } from "../utils/auth";
 export default function Home() {
   const [currUser, setCurrUser] = useState(undefined);
   const [notes, setNotes] = useState([]);
+  const [filteredNotes, setFilteredNotes] = useState([]);
+
+  const [school, setSchool] = useState("");
+  const [course, setCourse] = useState("");
+  const [professor, setProfessor] = useState("");
 
   useEffect(() => {
     authenticateUser()
       .then((u) => setCurrUser(u))
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => console.log(e));
     axios
       .get(`${backendURL}/notes/`)
       .then((resNotes) => setNotes(resNotes.data))
       .catch((error) => alert("Notes not found"));
   }, []);
+
+  useEffect(() => {
+    const fNotes = notes.filter((n) => {
+      if (!matchString(n.school, school)) return false;
+      if (!matchString(n.course, course)) return false;
+      if (!matchString(n.professor, professor)) return false;
+      return true;
+    });
+    setFilteredNotes(fNotes);
+  }, [notes, school, course, professor]);
+
+  function matchString(outer, inner) {
+    outer = outer
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+    inner = inner
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+    return outer.indexOf(inner) !== -1;
+  }
 
   return (
     <div>
@@ -40,10 +65,36 @@ export default function Home() {
             <span className="material-icons">login</span> Log in
           </button>
         )}
+        <div className="container mt-4">
+          <input
+            type="text"
+            autoComplete="nope"
+            className="form-control home-query"
+            placeholder="Seach for school"
+            value={school}
+            onChange={(e) => setSchool(e.target.value)}
+          />
+          <input
+            type="text"
+            autoComplete="nope"
+            className="form-control home-query"
+            placeholder="Seach for course"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+          />
+          <input
+            type="text"
+            autoComplete="nope"
+            className="form-control home-query"
+            placeholder="Seach for professor"
+            value={professor}
+            onChange={(e) => setProfessor(e.target.value)}
+          />
+        </div>
       </div>
       <div className="container">
         <div className="row">
-          {notes.map((note) => (
+          {filteredNotes.map((note) => (
             <NoteSummary note={note} key={note._id} />
           ))}
         </div>
