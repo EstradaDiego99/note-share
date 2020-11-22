@@ -5,12 +5,12 @@ import { backendURL } from "../utils/globals";
 import { authenticateUser, logout } from "../utils/auth";
 
 export default function Home() {
-  const [user, setUser] = useState(undefined);
+  const [currUser, setCurrUser] = useState(undefined);
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
     authenticateUser()
-      .then((u) => setUser(u))
+      .then((u) => setCurrUser(u))
       .catch((e) => {
         console.log(e);
       });
@@ -24,14 +24,15 @@ export default function Home() {
     <div>
       <div className="jumbotron text-center">
         <h1 className="text-center mt-4 mb-4">
-          Hello{user ? ` ${user.name}` : ""}!! Welcome to the HOME page!!
+          Hello{currUser ? ` ${currUser.name}` : ""}!! Welcome to the HOME
+          page!!
         </h1>
-        {user && (
+        {currUser && (
           <button onClick={logout} className="btn btn-lg btn-danger">
             <span className="material-icons">exit_to_app</span> Log out
           </button>
         )}
-        {!user && (
+        {!currUser && (
           <button
             onClick={() => (window.location = "/login")}
             className="btn btn-lg btn-info"
@@ -47,7 +48,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      {user && (
+      {currUser && (
         <div className="container text-right mb-4">
           <button
             className="btn btn-lg btn-primary"

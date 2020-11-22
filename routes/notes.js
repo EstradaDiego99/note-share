@@ -44,7 +44,7 @@ router.post("/", multer.single("file"), (req, res, next) => {
 
 // READ
 router.route("/").get((req, res) => {
-  Note.find()
+  Note.find(req.query)
     .then((notes) => res.json(notes))
     .catch((err) => res.status(400).json("Error: " + err));
 });

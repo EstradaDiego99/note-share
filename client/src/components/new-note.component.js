@@ -4,7 +4,7 @@ import { backendURL } from "../utils/globals";
 import { authenticateUser } from "../utils/auth";
 
 export default function NewNote(props) {
-  const [user, setUser] = useState(undefined);
+  const [currUser, setCurrUser] = useState(undefined);
 
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(undefined);
@@ -62,7 +62,7 @@ export default function NewNote(props) {
 
     // const passwordHash = await bcrypt.hash(password, 10);
     const newNote = new FormData();
-    newNote.append("author", user._id);
+    newNote.append("author", currUser._id);
     newNote.append("title", title);
     newNote.append("file", file);
     newNote.append("school", school);
@@ -84,7 +84,7 @@ export default function NewNote(props) {
 
   useEffect(() => {
     authenticateUser()
-      .then((u) => setUser(u))
+      .then((cu) => setCurrUser(cu))
       .catch((e) => {
         console.log(e);
         alert("Logged user was not found");
@@ -92,9 +92,7 @@ export default function NewNote(props) {
       });
   }, []);
 
-  if (!user) {
-    return <></>;
-  }
+  if (!currUser) return <></>;
 
   return (
     <div className="d-flex min-vh-100 align-items-center">

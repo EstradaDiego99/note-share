@@ -5,8 +5,8 @@ import FileViewer from "react-file-viewer";
 import { backendURL } from "../utils/globals";
 import { authenticateUser } from "../utils/auth";
 
-export default function ShowNote(props) {
-  const [user, setUser] = useState(undefined);
+export default function NoteShow(props) {
+  const [currUser, setCurrUser] = useState(undefined);
   const [note, setNote] = useState(undefined);
   const [author, setAuthor] = useState(undefined);
 
@@ -25,7 +25,7 @@ export default function ShowNote(props) {
 
   useEffect(() => {
     authenticateUser()
-      .then((user) => setUser(user))
+      .then((cu) => setCurrUser(cu))
       .catch((error) => console.log(error));
     axios
       .get(`${backendURL}/notes/${noteID}`)
@@ -49,7 +49,10 @@ export default function ShowNote(props) {
         <div className="row mt-3">
           <div className="col-12 col-md-6 mt-4 note-info d-flex flex-column">
             <h1 className="h1">{note.title}</h1>
-            <h3 className="text-secondary ml-4 mb-4 h3">
+            <h3
+              className="text-secondary ml-4 mb-4 h3 author-label"
+              onClick={() => (window.location = `/users/${note.author}`)}
+            >
               {author.name} {author.lastName}
             </h3>
             <p className="mb-3">
@@ -74,7 +77,7 @@ export default function ShowNote(props) {
                 <span className="material-icons mr-2">get_app</span>
                 Download file
               </a>
-              {user && author._id === user._id && (
+              {currUser && author._id === currUser._id && (
                 <>
                   <button
                     onClick={() => {
