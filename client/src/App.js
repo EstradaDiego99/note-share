@@ -5,7 +5,7 @@ import LogIn from "./components/login.component";
 import Home from "./components/home.component";
 import NewNote from "./components/new-note.component";
 import EditNote from "./components/edit-note.component";
-import ShowNote from "./components/note-show.component";
+import ShowNote from "./components/show-note.component";
 import ShowUser from "./components/user-show.component";
 import "./App.css";
 
@@ -28,8 +28,8 @@ function App() {
       <Route path="/login" exact component={LogIn} />
       <Route path="/signup" exact component={SignUp} />
       <Route path="/new_note" exact component={NewNote} />
-      <Route path="/edit_note/:noteID" exact component={EditNote} />
       <Route path="/notes/:noteID" component={ShowNote} />
+      <Route path="/edit_note/:noteID" component={EditNote} />
       <Route path="/users/:userID" exact component={ShowUser} />
     </Router>
   );
