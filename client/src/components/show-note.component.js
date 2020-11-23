@@ -38,7 +38,7 @@ export default function NoteShow(props) {
           .then((resUser) => setAuthor(resUser.data))
           .catch((e) => alert("Author not found"));
       })
-      .catch((e) => {});
+      .catch((e) => { });
   }, [noteID]);
 
   if (!note || !author) return <></>;
@@ -49,10 +49,15 @@ export default function NoteShow(props) {
         <div className="row mt-3">
           <div className="col-12 col-md-6 mt-4 note-info d-flex flex-column">
             <h1 className="h1">{note.title}</h1>
-            <h3
-              className="text-secondary ml-4 mb-4 h3 author-label"
-              onClick={() => (window.location = `/users/${note.author}`)}
-            >
+            <h3 className="text-secondary mb-4 h3 author-label">
+              <button
+                onClick={() => {
+                  window.location = `/users/${note.author}`;
+                }}
+                className="btn btn-md btn-primary mr-3"
+              >
+                <span className="material-icons">person</span>
+              </button>
               {author.name} {author.lastName}
             </h3>
             <p className="mb-3">
