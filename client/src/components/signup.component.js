@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { backendURL } from "../utils/globals";
-// import bcrypt from "bcryptjs";
 
 export default function SignUp(props) {
   const [name, setName] = useState("");
@@ -21,49 +20,35 @@ export default function SignUp(props) {
 
     if (!name) {
       incompleteForm = true;
-      setNameError(`
-        Name field cannot be empty.
-      `);
+      setNameError(`Name field cannot be empty.`);
     }
 
     if (!lastName) {
       incompleteForm = true;
-      setNameError(`
-        Last name field cannot be empty.
-      `);
+      setNameError(`Last name field cannot be empty.`);
     }
 
     if (!email) {
       incompleteForm = true;
-      setEmailError(`
-        Email field cannot be empty.
-      `);
+      setEmailError(`Email field cannot be empty.`);
     }
 
     if (!password) {
       incompleteForm = true;
-      setPasswordError(`
-        Password field cannot be empty.
-      `);
+      setPasswordError(`Password field cannot be empty.`);
     }
 
     if (password.length < 8) {
       incompleteForm = true;
-      setPasswordError(`
-        Password must be 8 characters minimum.
-      `);
+      setPasswordError(`Password must be 8 characters minimum.`);
     }
 
     if (password !== passwordConfirm) {
       incompleteForm = true;
-      setPasswordError(`
-        Passwords do not match.
-      `);
+      setPasswordError(`Passwords do not match.`);
     }
 
     if (incompleteForm) return;
-
-    // const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = {
       name: name,
@@ -84,6 +69,7 @@ export default function SignUp(props) {
       window.location = "/";
     } catch (error) {
       const { msg, errorCause } = error.response.data;
+      alert(msg);
       if (errorCause && errorCause === "email") {
         setEmailError(msg);
       } else if (errorCause && errorCause === "password") {

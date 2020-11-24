@@ -1,13 +1,26 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
 const { User } = require("../models/user.model");
 
 // CREATE
-router.route("/").post((req, res) => {
+router.route("/").post(async (req, res) => {
+  req.body.password = await bcrypt.hash(req.body.password, 10);
   const newUser = new User(req.body);
   newUser
     .save()
-    .then(() => res.json("New User registered!"))
-    .catch((err) => res.status(400).json(`Error: ${err}`));
+    .catch((err) => {
+      const response = {
+        backendError: err,
+        msg: "There has been an error creating the user.",
+      };
+      if (err.code === 11000) {
+        const repeatedKey = Object.keys(err.keyValue)[0];
+        response.msg = `There is already a registered account with this ${repeatedKey}`;
+        response.errorCause = repeatedKey;
+      }
+      res.status(400).json(response);
+    })
+    .then(() => res.json("New User registered!"));
 });
 
 // READ

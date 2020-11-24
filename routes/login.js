@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
 const { User } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
@@ -6,7 +7,6 @@ router.route("/").post(async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // validate
     if (!email || !password)
       return res.status(400).json({ msg: "Incomplete fields." });
 
@@ -17,10 +17,11 @@ router.route("/").post(async (req, res) => {
         errorCause: "email",
       });
 
-    if (password != user.password)
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch && password !== user.password)
       return res
         .status(400)
-        .json({ msg: "Incorrect password.", errorCause: "password" });
+        .json({ msg: "Incorrect password.", errorCause: "Password" });
 
     const token = jwt.sign(
       { _id: user._id.toString() },

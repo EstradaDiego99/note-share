@@ -60,7 +60,6 @@ export default function NewNote(props) {
 
     if (incompleteForm) return;
 
-    // const passwordHash = await bcrypt.hash(password, 10);
     const newNote = new FormData();
     newNote.append("author", currUser._id);
     newNote.append("title", title);
