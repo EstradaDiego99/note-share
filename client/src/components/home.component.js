@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import NoteSummary from "./note-summary.component";
-import { backendURL } from "../utils/globals";
+import { backendURL, stringsMatch } from "../utils/globals";
 import { authenticateUser, logout } from "../utils/auth";
 
 export default function Home() {
@@ -25,25 +25,13 @@ export default function Home() {
 
   useEffect(() => {
     const fNotes = notes.filter((n) => {
-      if (!matchString(n.school, school)) return false;
-      if (!matchString(n.course, course)) return false;
-      if (!matchString(n.professor, professor)) return false;
+      if (!stringsMatch(n.school, school)) return false;
+      if (!stringsMatch(n.course, course)) return false;
+      if (!stringsMatch(n.professor, professor)) return false;
       return true;
     });
     setFilteredNotes(fNotes);
   }, [notes, school, course, professor]);
-
-  function matchString(outer, inner) {
-    outer = outer
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-    inner = inner
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-    return outer.indexOf(inner) !== -1;
-  }
 
   return (
     <div>

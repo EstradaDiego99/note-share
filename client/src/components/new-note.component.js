@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { backendURL } from "../utils/globals";
+import { backendURL, stringsMatch } from "../utils/globals";
 import { authenticateUser } from "../utils/auth";
 
 export default function NewNote(props) {
@@ -17,6 +17,11 @@ export default function NewNote(props) {
   const [schoolError, setSchoolError] = useState("");
   const [courseError, setCourseError] = useState("");
   const [professorError, setProfessorError] = useState("");
+
+  const [notes, setNotes] = useState("");
+  const [schoolSuggestions, setSchoolSuggestions] = useState([]);
+  const [courseSuggestions, setCourseSuggestions] = useState([]);
+  const [professorSuggestions, setProfessorSuggestions] = useState([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -85,11 +90,49 @@ export default function NewNote(props) {
     authenticateUser()
       .then((cu) => setCurrUser(cu))
       .catch((e) => {
-        console.log(e);
-        alert("Logged user was not found");
+        alert(JSON.stringify(e));
         window.location = "/login";
       });
+    axios
+      .get(`${backendURL}/notes/`)
+      .then((resNotes) => setNotes(resNotes.data))
+      .catch((error) => alert(JSON.stringify(error)));
   }, []);
+
+  useEffect(() => {
+    const updateSuggestions = () => {
+      let auxSuggestions;
+
+      auxSuggestions = new Set();
+      for (const note of notes) {
+        if (course && note.course !== course) continue;
+        if (professor && note.professor !== professor) continue;
+        if (!stringsMatch(note.school, school)) continue;
+        auxSuggestions.add(note.school);
+      }
+      setSchoolSuggestions(Array.from(auxSuggestions));
+
+      auxSuggestions = new Set();
+      for (const note of notes) {
+        if (school && note.school !== school) continue;
+        if (professor && note.professor !== professor) continue;
+        if (!stringsMatch(note.course, course)) continue;
+        auxSuggestions.add(note.course);
+      }
+      setCourseSuggestions(Array.from(auxSuggestions));
+
+      auxSuggestions = new Set();
+      for (const note of notes) {
+        if (school && note.school !== school) continue;
+        if (course && note.course !== course) continue;
+        if (!stringsMatch(note.professor, professor)) continue;
+        auxSuggestions.add(note.professor);
+      }
+      setProfessorSuggestions(Array.from(auxSuggestions));
+    };
+
+    updateSuggestions();
+  }, [notes, school, course, professor]);
 
   if (!currUser) return <></>;
 
@@ -120,7 +163,7 @@ export default function NewNote(props) {
               </div>
               <small className="text-danger">{titleError}</small>
 
-              <div className="form-group">
+              <div id="school-input" className="form-group">
                 <label>School: </label>
                 <input
                   type="text"
@@ -132,10 +175,25 @@ export default function NewNote(props) {
                     setSchoolError("");
                   }}
                 />
+                <div className="suggestions-container">
+                  <ul className="list-group">
+                    {schoolSuggestions.map((suggestion) => {
+                      return (
+                        <li
+                          key={suggestion}
+                          className="list-group-item"
+                          onMouseDown={() => setSchool(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
               <small className="text-danger">{schoolError}</small>
 
-              <div className="form-group">
+              <div id="course-input" className="form-group">
                 <label>Course: </label>
                 <input
                   type="text"
@@ -147,10 +205,25 @@ export default function NewNote(props) {
                     setCourseError("");
                   }}
                 />
+                <div className="suggestions-container">
+                  <ul className="list-group">
+                    {courseSuggestions.map((suggestion) => {
+                      return (
+                        <li
+                          key={suggestion}
+                          className="list-group-item"
+                          onMouseDown={() => setCourse(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
               <small className="text-danger">{courseError}</small>
 
-              <div className="form-group">
+              <div id="professor-input" className="form-group">
                 <label>Professor: </label>
                 <input
                   type="text"
@@ -162,6 +235,21 @@ export default function NewNote(props) {
                     setProfessorError("");
                   }}
                 />
+                <div className="suggestions-container">
+                  <ul className="list-group">
+                    {professorSuggestions.map((suggestion) => {
+                      return (
+                        <li
+                          key={suggestion}
+                          className="list-group-item"
+                          onMouseDown={() => setProfessor(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
               <small className="text-danger">{professorError}</small>
 

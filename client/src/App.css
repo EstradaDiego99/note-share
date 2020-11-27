@@ -54,6 +54,18 @@
   margin: 0.5em;
 }
 
+.suggestions-container {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+}
+
+#school-input:focus-within .suggestions-container,
+#course-input:focus-within .suggestions-container,
+#professor-input:focus-within .suggestions-container {
+  display: block;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
