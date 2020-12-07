@@ -11,7 +11,7 @@ const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 const multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+    fileSize: 128 * 1024 * 1024, // no larger than 5mb, you can change as needed.
   },
 });
 

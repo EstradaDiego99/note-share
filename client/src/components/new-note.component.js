@@ -90,7 +90,7 @@ export default function NewNote(props) {
     authenticateUser()
       .then((cu) => setCurrUser(cu))
       .catch((e) => {
-        alert(JSON.stringify(e));
+        alert("User must be logged in to submit notes");
         window.location = "/login";
       });
     axios

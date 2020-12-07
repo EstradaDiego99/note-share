@@ -7,10 +7,6 @@
   pointer-events: none;
 }
 
-.note-summary {
-  cursor: pointer;
-}
-
 .note-info p {
   font-size: 1.5em;
   line-height: 1em;
@@ -64,6 +60,13 @@
 #course-input:focus-within .suggestions-container,
 #professor-input:focus-within .suggestions-container {
   display: block;
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
 }
 
 @keyframes App-logo-spin {

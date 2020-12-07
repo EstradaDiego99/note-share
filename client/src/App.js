@@ -1,13 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import SignUp from "./components/signup.component";
-import LogIn from "./components/login.component";
-import Home from "./components/home.component";
-import NewNote from "./components/new-note.component";
-import EditNote from "./components/edit-note.component";
-import ShowNote from "./components/show-note.component";
-import ShowUser from "./components/user-show.component";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
+
+const Home = lazy(() => import("./components/home.component"));
+const SignUp = lazy(() => import("./components/signup.component"));
+const LogIn = lazy(() => import("./components/login.component"));
+const NewNote = lazy(() => import("./components/new-note.component"));
+const EditNote = lazy(() => import("./components/edit-note.component"));
+const ShowNote = lazy(() => import("./components/show-note.component"));
+const ShowUser = lazy(() => import("./components/user-show.component"));
 
 function App() {
   // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -24,13 +25,17 @@ function App() {
 
   return (
     <Router>
-      <Route path="/" exact component={Home} />
-      <Route path="/login" exact component={LogIn} />
-      <Route path="/signup" exact component={SignUp} />
-      <Route path="/new_note" exact component={NewNote} />
-      <Route path="/notes/:noteID" component={ShowNote} />
-      <Route path="/edit_note/:noteID" component={EditNote} />
-      <Route path="/users/:userID" exact component={ShowUser} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/login" exact component={LogIn} />
+          <Route path="/signup" exact component={SignUp} />
+          <Route path="/notes/new" exact component={NewNote} />
+          <Route path="/notes/:noteID" component={ShowNote} />
+          <Route path="/notes/:noteID/edit" component={EditNote} />
+          <Route path="/users/:userID" exact component={ShowUser} />
+        </Switch>
+      </Suspense>
     </Router>
   );
 }

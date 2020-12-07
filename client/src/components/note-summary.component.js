@@ -1,13 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function NoteSummary(props) {
   const { note } = props;
 
   return (
-    <div
-      className="col-md-4 mb-4 note-summary"
-      onClick={() => (window.location = `/notes/${note._id}`)}
-    >
+    <Link to={`/notes/${note._id}`} className="col-md-4 mb-4">
       <div className="card box-shadow">
         <div className="card-img-top text-center bg-secondary">
           <span
@@ -39,6 +37,6 @@ export default function NoteSummary(props) {
           </small>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
